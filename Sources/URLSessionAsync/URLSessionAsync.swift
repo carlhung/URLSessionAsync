@@ -67,7 +67,7 @@ public extension URLSession {
     @inlinable
     func fetch<T: Decodable>(
         from: URL, 
-        accept state: CheckStatus? = nil, 
+        accept status: CheckStatus? = nil, 
         encoding: String.Encoding = .utf8,
         decodingStrategy: JSONDecoder.KeyDecodingStrategy = .useDefaultKeys,
         dateDecodingStrategy: JSONDecoder.DateDecodingStrategy = .deferredToDate,
@@ -75,7 +75,14 @@ public extension URLSession {
         decode type: T.Type = T.self
     ) async throws -> T {
         let result = try await self.data(from: from)
-        return try handler(result: result, status: state)
+        return try handler(
+            result: result, 
+            status: status, 
+            encoding: encoding, 
+            decodingStrategy: decodingStrategy, 
+            dateDecodingStrategy: dateDecodingStrategy, 
+            dataDecodingStrategy: dataDecodingStrategy
+        )
     }
 
     @available(macOS 12, iOS 15, *)
