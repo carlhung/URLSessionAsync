@@ -5,21 +5,27 @@ import Foundation
 #endif
 
 public extension URLSession {
-    enum URLSessionError: String, Error {
+    enum URLSessionError: Error {
         case nilData
         case nilResponse
-        case httpURLResponseFailure = "failed to cast to HTTPURLResponse"
-        case statusCodeFailure = "wrong status code"
+        case httpURLResponseFailure
+        case wrongStatusCode(Int)
 
         // It must mark as public. otherwise, I will consider as internal.
         // when the other module runs it, it will call the default one.
         public var localizedDescription: String {
-            rawValue
+            switch self {
+            case .nilData: return "nil data"
+            case .nilResponse: return "nil response"
+            case .httpURLResponseFailure: return "failed to cast to HTTPURLResponse"
+            case .wrongStatusCode(let wrongCode):
+                return "wrong status code: " + String(wrongCode)
+            }
         }
     }
 
     enum CheckStatus {
-        case statusRange(Range<Int>), statusCode(Int)
+        case statusRange(Range<Int>), statusCode(Int), statusCodeSet(Set<Int>)
     }
 }
 
@@ -128,11 +134,13 @@ public extension URLSession {
                 isSuccess = true
             case .statusCode(let code) where code == httpURLResponse.statusCode:
                 isSuccess = true
+            case .statusCodeSet(let statusCodeSet) where statusCodeSet.contains(httpURLResponse.statusCode):
+                isSuccess = true
             default:
                 isSuccess = false
             }
             guard isSuccess else {
-                throw URLSessionError.statusCodeFailure
+                throw URLSessionError.wrongStatusCode(httpURLResponse.statusCode)
             }
         }
         return try data.decodeJSON(decodingStrategy: decodingStrategy, dateDecodingStrategy: dateDecodingStrategy, dataDecodingStrategy: dataDecodingStrategy)
