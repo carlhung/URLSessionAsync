@@ -1,6 +1,8 @@
 import XCTest
 @testable import URLSessionAsync
-
+#if canImport(FoundationNetworking)
+    import FoundationNetworking
+#endif
 
 fileprivate struct Model: Decodable {
     enum Sex: String, Decodable {
@@ -33,5 +35,9 @@ final class URLSessionAsyncTests: XCTestCase {
         let data: Model? = try modelStr.decodeJSON()
 
         XCTAssertNotNil(data)
+    }
+
+    func testErrorMessages() {
+        XCTAssert(URLSession.URLSessionError.httpURLResponseFailure.description == "failed to cast to HTTPURLResponse")
     }
 }

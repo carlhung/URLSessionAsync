@@ -5,7 +5,7 @@ import Foundation
 #endif
 
 public extension URLSession {
-    enum URLSessionError: Error {
+    enum URLSessionError: CustomStringConvertible, Error {
         case nilData
         case nilResponse
         case httpURLResponseFailure
@@ -21,6 +21,10 @@ public extension URLSession {
             case .wrongStatusCode(let wrongCode):
                 return "wrong status code: " + String(wrongCode)
             }
+        }
+
+        public var description: String {
+            self.localizedDescription
         }
     }
 
