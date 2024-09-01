@@ -121,10 +121,10 @@ public extension URLSession {
     internal func handler<T: Decodable>(
         result: (Data, URLResponse), 
         status: CheckStatus?, 
-        encoding: String.Encoding = .utf8,
-        decodingStrategy: JSONDecoder.KeyDecodingStrategy = .useDefaultKeys,
-        dateDecodingStrategy: JSONDecoder.DateDecodingStrategy = .deferredToDate,
-        dataDecodingStrategy: JSONDecoder.DataDecodingStrategy = .base64
+        encoding: String.Encoding,// = .utf8,
+        decodingStrategy: JSONDecoder.KeyDecodingStrategy,// = .useDefaultKeys,
+        dateDecodingStrategy: JSONDecoder.DateDecodingStrategy,// = .deferredToDate,
+        dataDecodingStrategy: JSONDecoder.DataDecodingStrategy// = .base64
     ) throws -> T {
         let (data, response) = result
         guard let httpURLResponse = response as? HTTPURLResponse else {
