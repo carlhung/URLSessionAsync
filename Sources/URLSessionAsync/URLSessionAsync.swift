@@ -82,7 +82,7 @@ public extension URLSession {
         decodingStrategy: JSONDecoder.KeyDecodingStrategy = .useDefaultKeys,
         dateDecodingStrategy: JSONDecoder.DateDecodingStrategy = .deferredToDate,
         dataDecodingStrategy: JSONDecoder.DataDecodingStrategy = .base64, 
-        decode type: T.Type = T.self
+        decode _: T.Type = T.self
     ) async throws -> T {
         let result = try await self.data(from: from)
         return try handler(
@@ -104,7 +104,7 @@ public extension URLSession {
         decodingStrategy: JSONDecoder.KeyDecodingStrategy = .useDefaultKeys,
         dateDecodingStrategy: JSONDecoder.DateDecodingStrategy = .deferredToDate,
         dataDecodingStrategy: JSONDecoder.DataDecodingStrategy = .base64,
-        decode type: T.Type = T.self
+        decode _: T.Type = T.self
     ) async throws -> T {
         let result = try await self.data(for: request)
         return try handler(
